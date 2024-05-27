@@ -5,10 +5,10 @@ Convert your image data to a Poisson spike source to be able to use with Spiking
 <div align="center">
   <table>
     <tr>
-      <td> <img src="images/horizontal_line.png" alt= "Horizontal Line"  height="120"> </td>
-      <td> &rarr; </td>
       <td> <img src="images/vertical_line.png" alt="Vertical Line" height="120"> </td>
+      <td> &rarr; </td>
       <td> <img src="images/image_45.png" alt= "45 degrees Line"  height="120"> </td>
+      <td> <img src="images/horizontal_line.png" alt= "Horizontal Line"  height="120"> </td>
       <td> &rarr; </td>
       <td> <img src="images/image_135.png" alt="135 degrees Line" height="120"> </td>
       <td> &rarr; </td>
