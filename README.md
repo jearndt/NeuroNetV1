@@ -9,6 +9,7 @@ Convert your image data to a Poisson spike source to be able to use with Spiking
       <td> &rarr; </td>
       <td> <img src="images/vertical_line.png" alt="Vertical Line" height="120"> </td>
       <td> &rarr; </td>
+      <td> <img src="plots\raster_plot_horizontal_line.png" alt="Horizontal Line-SpikesPlot" height="135"> </td> 
     </tr>
   </table>
 </div>  
