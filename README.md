@@ -35,6 +35,8 @@ Run `pip install -r requirements.txt` to install them all.
 ```
 images-to-spikes/
 ├── convert_image_to_spike_array.py
+├── create_dataset.py
+└── dataset_vizualization.ipynb
 ├── draw_image.py
 ├── images
 │   ├── cross.png
@@ -44,6 +46,8 @@ images-to-spikes/
 │   └── image_135.png
 ├── poisson_tools.py
 └── util_functions.py
+
+
 ```
 **[convert_image_to_spike_array.py](convert_image_to_spike_array.py)** is the main file. 
   - Please see its usage by running it: `python convert_image_to_spike_array.py`
@@ -54,7 +58,7 @@ images-to-spikes/
 
 **[create_dataset.py](create_dataset.py)** creates a dataset form the saved pickle files and then save it in a csv file called        [spike_dataset.csv](spike_dataset.csv) 
 
-**[vizualize_dataset.py](vizualize_dataset.py)** is a jupyter notebook that helps understand the created dataset where also creates a heatmap of the spike activity in the dataset: 
+**[dataset_vizualization.ipynb](dataset_vizualization.ipynb)** is a jupyter notebook that helps understand the created dataset where also creates a heatmap of the spike activity in the dataset: 
 <div align="center">
   <table>
     <tr>
