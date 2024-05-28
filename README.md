@@ -2,8 +2,14 @@
 
 Convert your image data to a Poisson spike source to be able to use with Spiking Neural Networks.
 ## Technique
+
+
 Poisson Spike Train Generation
+
+
   *Rate Coding*
+
+  
     *Count Rate*: This is the closest category where Poisson Spike Train Generation can be placed. The method involves counting spikes generated over a time window, where the count rate is influenced by the pixel intensity.
 
 <div align="center">
