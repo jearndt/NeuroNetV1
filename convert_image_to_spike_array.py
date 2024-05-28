@@ -15,6 +15,10 @@ def img_to_spike_array(img_file_name, max_freq, on_duration, off_duration, save_
         spikes = image_to_poisson_trains(np.array([img.reshape(height * width)]),  # notice reshape
                                          height, width,
                                          max_freq, on_duration, off_duration)
+        
+        # Debug: Check the content of spikes
+        print(f"Spike data for {img_file_name}: {spikes}")
+
         # Save the raster plot
         if save_plot:
             plot_dir = "plots"
@@ -69,3 +73,4 @@ if __name__ == '__main__':
                     img_to_spike_array(img, max_freq, on_duration, off_duration)
         elif os.path.isfile(img_file_name):
             img_to_spike_array(img_file_name, max_freq, on_duration, off_duration)
+
