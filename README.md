@@ -60,7 +60,7 @@ images-to-spikes/
 
 ```
 **[convert_image_to_spike_array.py](convert_image_to_spike_array.py)** is the main file. 
-  - Please see its usage by running it: `python convert_image_to_spike_array.py`
+  - Please see its usage by running it: `python convert_image_to_spike_array.py images 1000 200 100`
   - The program will store the output spike array as a _pickle_ under _pickles/_ folder in the same directory after the run. 
   - The program will create a folder called plots, tha twill store 4 rester plots with spike trains for each image. 
   - If you do not want a _pickle_ at the end, change the parameter inside the file, i.e. `save_as_pickle=False`.

@@ -16,6 +16,24 @@ def apply_receptive_field_filter(img, sigma=1):
     """
     return gaussian_filter(img, sigma=sigma)
 
+def generate_connectivity_matrix(height, width, sigma=5):
+    """
+    Generate a connectivity matrix based on the Gaussian receptive field.
+    :param height: Height of the image
+    :param width: Width of the image
+    :param sigma: Standard deviation for Gaussian kernel
+    :return: Connectivity matrix
+    """
+    size = height * width
+    connectivity_matrix = np.zeros((size, size))
+    for i in range(height):
+        for j in range(width):
+            for k in range(height):
+                for l in range(width):
+                    distance = np.sqrt((i - k)**2 + (j - l)**2)
+                    connectivity_matrix[i * width + j, k * width + l] = np.exp(-distance**2 / (2 * sigma**2))
+    return connectivity_matrix
+
 def img_to_spike_array(img_file_name, max_freq, on_duration, off_duration, sigma=1, save_as_pickle=True, save_plot=True):
     img = cv2.imread(img_file_name, cv2.IMREAD_GRAYSCALE)
     if img is not None:
@@ -31,6 +49,10 @@ def img_to_spike_array(img_file_name, max_freq, on_duration, off_duration, sigma
         
         # Debug: Check the content of spikes
         print(f"Spike data for {img_file_name}: {spikes}")
+
+        # Generate connectivity matrix
+        connectivity_matrix = generate_connectivity_matrix(height, width, sigma=sigma)
+        print(f"Connectivity matrix for {img_file_name}: {connectivity_matrix}")
 
         # Save the raster plot
         if save_plot:
