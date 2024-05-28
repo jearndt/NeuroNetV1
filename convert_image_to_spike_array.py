@@ -2,17 +2,30 @@ import numpy as np
 import cv2
 import sys
 import os
-import pylab
 from matplotlib import pyplot as plt
+from scipy.ndimage import gaussian_filter
 from poisson_tools import image_to_poisson_trains
 from util_functions import raster_plot_spike, pickle_it
 
-def img_to_spike_array(img_file_name, max_freq, on_duration, off_duration, save_as_pickle=True, save_plot=True):
+def apply_receptive_field_filter(img, sigma=1):
+    """
+    Apply a Gaussian filter to the image to simulate the receptive field.
+    :param img: Input grayscale image
+    :param sigma: Standard deviation for Gaussian kernel
+    :return: Filtered image
+    """
+    return gaussian_filter(img, sigma=sigma)
+
+def img_to_spike_array(img_file_name, max_freq, on_duration, off_duration, sigma=1, save_as_pickle=True, save_plot=True):
     img = cv2.imread(img_file_name, cv2.IMREAD_GRAYSCALE)
     if img is not None:
         height, width = img.shape
-
-        spikes = image_to_poisson_trains(np.array([img.reshape(height * width)]),  # notice reshape
+        
+        # Apply the receptive field filter (Gaussian filter)
+        filtered_img = apply_receptive_field_filter(img, sigma=sigma)
+        
+        # Flatten the filtered image and convert to spike trains
+        spikes = image_to_poisson_trains(np.array([filtered_img.reshape(height * width)]),
                                          height, width,
                                          max_freq, on_duration, off_duration)
         
@@ -73,4 +86,3 @@ if __name__ == '__main__':
                     img_to_spike_array(img, max_freq, on_duration, off_duration)
         elif os.path.isfile(img_file_name):
             img_to_spike_array(img_file_name, max_freq, on_duration, off_duration)
-
