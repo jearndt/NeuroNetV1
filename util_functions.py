@@ -5,19 +5,16 @@ from matplotlib import pyplot as plt
 
 
 #--- File Operations ----------------------------------------------------------#
-def pickle_it(pickle_to_be, pickle_file_name):
+def pickle_it(pickle_to_be, pickle_file_path):
     if pickle_to_be is not None:
-        dir_name = 'pickles'
+        # Ensure the directory exists
+        dir_name = os.path.dirname(pickle_file_path)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
 
-        pickle_file_path = os.path.join(dir_name, pickle_file_name)
         with open(pickle_file_path, 'wb') as pickle_file_obj:  # open the file for writing
             pickle.dump(pickle_to_be, pickle_file_obj, protocol=2)  # so that python2.x can also read it
         print("Pickle is ready! -> {}".format(pickle_file_path))
-
-        """ For more info., about bz2 etc.:
-        https://www.datacamp.com/community/tutorials/pickle-python-tutorial """
 
 
 def unpickle( pickle_file_name ):
@@ -36,8 +33,8 @@ def save_img( img_file_name, img_matrix, show_image=True ):
         img_file_name = "{}/{}".format( dir_name, img_file_name )
         cv2.imwrite( img_file_name, img_matrix )
 
-        if show_image:
-            imshow_matplot( img_matrix )
+        #if show_image:
+            #imshow_matplot( img_matrix )
 
 
 #--- Display Images -----------------------------------------------------------#

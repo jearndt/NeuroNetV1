@@ -15,14 +15,14 @@ Poisson Spike Train Generation
 <div align="center">
   <table>
     <tr>
-      <td> <img src="images/vertical_line.png" alt="Vertical Line" height="120"> </td>
+      <td> <img src="images\angle_0_pos_0_var_0.png" alt="Vertical Line" height="120"> </td>
       <td> &rarr; </td>
-      <td> <img src="images/image_45.png" alt= "45 degrees Line"  height="120"> </td>
-      <td> <img src="images/horizontal_line.png" alt= "Horizontal Line"  height="120"> </td>
+      <td> <img src="images\angle_45_corner_1_var_28.png" alt= "45 degrees Line"  height="120"> </td>
+      <td> <img src="images\angle_90_pos_1_var_40.png" alt= "Horizontal Line"  height="120"> </td>
       <td> &rarr; </td>
       <td> <img src="images/image_135.png" alt="135 degrees Line" height="120"> </td>
       <td> &rarr; </td>
-      <td> <img src="plots\raster_plot_horizontal_line.png" alt="Horizontal Line-SpikesPlot" height="135"> </td> 
+      <td> <img src="raster_plots\raster_plot_angle_0_pos_0_var_0.png" alt="Horizontal Line-SpikesPlot" height="135"> </td> 
     </tr>
   </table>
 </div>  
@@ -48,6 +48,7 @@ images-to-spikes/
 ├── create_dataset.py
 └── dataset_vizualization.ipynb
 ├── draw_image.py
+├── filtered_images
 ├── images
 │   ├── cross.png
 │   ├── horizontal_line_.png

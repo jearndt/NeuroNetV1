@@ -1,151 +1,93 @@
-""" Draw (onto)black(canvas) & white images with basic shapes (i.e. lines, circles, rectangles)
-    via the functions below.
-
-    Functions:
-    - draw_horizontal_lines
-    - draw_vertical_lines
-    - draw_line_with_angle
-    - draw_a_rectangle
-    - draw_a_circle
-
-    Feel free to mix and match them to have multiple shapes in an image
-    by passing the same "img" parameter into the functions.
-"""
-
 import numpy as np
 import cv2
+import os
 
-from util_functions import *
+def save_img(file_path, img):
+    cv2.imwrite(file_path, img)
 
-
-
-""" @Params:
-
-* width: Width of the image
-* height: Height of the image
-* thickness: Thickness of the line
-* key: Sets where the line would stand in the image.
-**  key options: start | middle | end | random
-* line_count: Only matters if the key equals to 'random', otherwise there would
-  always be 1 line in the image.
-* img: When not supplied, a new image is created, otherwise the passed image is used.
-"""
-def draw_horizontal_lines( width, height, thickness = 1, line_count=1, key='middle', img=None ):
-    if thickness < 1 or thickness >= height:
-        print( "Thickness value is invalid for this image. -> {}".format( thickness ) )
-    else:
-        img = np.zeros( (height, width) ) if img is None else img
-
-        if key == 'random':
-            random_idx = np.random.random_integers( 0, height-thickness, line_count )
-            for i in range( line_count ):
-                cv2.line( img, (0, random_idx[i]), (width-1, random_idx[i]), 255, thickness )
-        else:
-            if key == 'middle':
-                idx = height//2
-            elif key == 'start':
-                idx = thickness//2
-            elif key == 'end':
-                idx = height-thickness//2
-            cv2.line( img, (0, idx), (width-1, idx), 255, thickness )
-
-        return img
-
-
-""" For @Params see above.
-"""
-def draw_vertical_lines( width, height, thickness=1, line_count=1, key='middle', img=None ):
-    if thickness < 1 or thickness >= width:
-        print( "Thickness value is invalid for this image. -> {}".format( thickness ) )
-    else:
-        img = np.zeros( (height, width) ) if img is None else img
-
-        if key == 'random':
-            random_idx = np.random.random_integers( 0, width-thickness, line_count )
-            for i in range( line_count ):
-                cv2.line( img, (random_idx[i], 0), (random_idx[i], height-1), 255, thickness )
-        else:
-            if key == 'middle':
-                idx = width//2
-            elif key == 'start':
-                idx = thickness//2
-            elif key == 'end':
-                idx = width-thickness//2
-            cv2.line( img, (idx, 0), (idx, height-1), 255, thickness )
-
-        return img
-
-
-""" @Params:
-
-* angle: Determines the angle of the line to be drawn.
-    Might be either 45 or 135 degrees.
-
-For the rest of the @Params see above.
-"""
-def draw_line_with_angle( width, height, angle, thickness=1, img=None ):
-    if thickness < 1:
-        print( "Thickness value is invalid for this image. -> {}".format( thickness ) )
-    elif angle not in (45, 135):
-        print( "Angle is not right. {} is not in [45, 135]".format( angle ) )
-    else:
-        img = np.zeros( (height, width) ) if img is None else img
-
-        if angle == 45:
-            cv2.line( img, (0, height-1), (width-1, 0), 255, thickness )
-        elif angle == 135:
-            cv2.line( img, (0, 0), (width-1, height-1), 255, thickness )
-
-        return img
-
-
-""" @Params:
-
-* top_left_pt: Top left point tuple of the rectangle to be drawn, e.g. (10, 12)
-* bottom_right_pt: Bottom right point tuple of the rectangle to be drawn, e.g. (29, 31)
-* thickness: -1 to fill inside the rectangle, otherwise determines the thickness
-    of the rectangle's outer lines.
-
-For the rest of the @Params see above.
-"""
-def draw_a_rectangle( width, height, top_left_pt, bottom_right_pt, thickness=1, img=None ):
-    img = np.zeros( (height, width) ) if img is None else img
-    cv2.rectangle( img, top_left_pt, bottom_right_pt, 255, thickness ) # 255 is the colour, default is white obviously
+def draw_line_with_angle(width, height, angle, line_length, thickness=5, img=None, center_x=None, center_y=None):
+    img = np.zeros((height, width)) if img is None else img
+    
+    if center_x is None:
+        center_x = width // 2
+    if center_y is None:
+        center_y = height // 2
+        
+    half_length = line_length // 2
+    
+    if angle == 0:
+        start_point = (center_x, center_y - half_length)
+        end_point = (center_x, center_y + half_length)
+    elif angle == 90:
+        start_point = (center_x - half_length, center_y)
+        end_point = (center_x + half_length, center_y)
+    elif angle == 45:
+        start_point = (center_x - half_length, center_y + half_length)
+        end_point = (center_x + half_length, center_y - half_length)
+    elif angle == 135:
+        start_point = (center_x - half_length, center_y - half_length)
+        end_point = (center_x + half_length, center_y + half_length)
+    
+    cv2.line(img, start_point, end_point, 255, thickness)
+    
     return img
 
+def apply_gaussian_filter(img, kernel_size=(9, 9), sigma=5):
+    return cv2.GaussianBlur(img, kernel_size, sigma)
 
-""" @Params:
+def create_dataset(output_dir, filtered_dir, width=256, height=256, line_length=100, thickness=5, positions=4, variations=50):
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
+    if not os.path.exists(filtered_dir):
+        os.makedirs(filtered_dir)
+    
+    angles = [0, 45, 90, 135]
+    position_offsets = np.linspace(-width//4, width//4, positions)
+    
+    corners = [(width // 4, height // 4), (3 * width // 4, height // 4), (width // 4, 3 * height // 4), (3 * width // 4, 3 * height // 4)]
+    
+    for angle in angles:
+        for var in range(variations):
+            if angle in [45, 135]:
+                for i, (cx, cy) in enumerate(corners):
+                    img = draw_line_with_angle(width, height, angle, line_length, thickness, center_x=cx, center_y=cy)
+                    img_name = f"angle_{angle}_corner_{i}_var_{var}.png"
+                    img_path = os.path.join(output_dir, img_name)
+                    
+                    save_img(img_path, img)
 
-* center_pt: Center point tuple of the circle to be drawn, e.g. (14, 20)
-* radius: Radius of the circle, e.g. 6.
+                    # Apply Gaussian filter and save the result
+                    filtered_img = apply_gaussian_filter(img)
+                    filtered_img_name = f"filtered_angle_{angle}_corner_{i}_var_{var}.png"
+                    filtered_img_path = os.path.join(filtered_dir, filtered_img_name)
+                    
+                    save_img(filtered_img_path, filtered_img)
+            else:
+                for pos in range(positions):
+                    img = draw_line_with_angle(width, height, angle, line_length, thickness)
+                    position_offset = position_offsets[pos]
+                    
+                    if angle == 0:
+                        M = np.float32([[1, 0, position_offset], [0, 1, 0]])
+                    elif angle == 90:
+                        M = np.float32([[1, 0, 0], [0, 1, position_offset]])
+                    
+                    img = cv2.warpAffine(img, M, (width, height))
+                    
+                    img_name = f"angle_{angle}_pos_{pos}_var_{var}.png"
+                    img_path = os.path.join(output_dir, img_name)
+                    
+                    save_img(img_path, img)
 
-For the rest of the @Params see function draw_a_rectangle.
-"""
-def draw_a_circle( width, height, center_pt, radius, thickness=1, img=None ):
-    img = np.zeros( (height, width) ) if img is None else img
-    cv2.circle( img, center_pt, radius, 255, thickness )
-    return img
-
-
+                    # Apply Gaussian filter and save the result
+                    filtered_img = apply_gaussian_filter(img)
+                    filtered_img_name = f"filtered_angle_{angle}_pos_{pos}_var_{var}.png"
+                    filtered_img_path = os.path.join(filtered_dir, filtered_img_name)
+                    
+                    save_img(filtered_img_path, filtered_img)
 
 if __name__ == '__main__':
-    # Some usage scenarios
-
-    width = height = 32
-    thickness = 3
-    img = draw_a_rectangle( width, height, (10, 12), (29, 31), -1 )
-    # img = draw_a_circle( width, height, (14, 20), 6, 2 )
-
-    #img = draw_line_with_angle( width, height, 45, thickness )
-    #img = draw_line_with_angle( width, height, 135, thickness, img )
-
-    #img = draw_horizontal_lines( width, height, thickness )
-    # img = draw_horizontal_lines( width, height, 1, 5, 'random' )
-
-    # img = draw_vertical_lines( width, height, thickness, img=img )
-    # img = draw_vertical_lines( width, height, 1, 5, 'random' )
-    #img = draw_vertical_lines(width, height, thickness, key='middle')
-
-    imshow_opencv( img )
-    img_name = "rectangle.png"
-    save_img( img_name, img )
+    output_dir = 'images'
+    filtered_dir = 'filtered_images'
+    create_dataset(output_dir, filtered_dir)

@@ -9,7 +9,7 @@ def load_spikes_from_pickle(pickle_file):
         print(f"Loaded spikes from {pickle_file}: {spikes}")
     return spikes
 
-def create_dataset_from_pickles(pickle_dir="pickles"):
+def create_dataset_from_pickles(pickle_dir="pickles_files"):
     dataset = {
         'file_name': [],
         'neuron_id': [],
