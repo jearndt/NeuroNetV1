@@ -53,19 +53,20 @@ Run `pip install -r requirements.txt` to install them all.
 ## Project Files and Their Usage
 ```
 images-to-spikes/
-├── convert_image_to_spike_array.py
-├── create_dataset.py
-└── dataset_vizualization.ipynb
-├── draw_image.py
-├── filtered_images
-├── images
-│   ├── cross.png
-│   ├── horizontal_line_.png
-│   ├── vertical_lines.png
-│   └── image_45.png
-│   └── image_135.png
-├── poisson_tools.py
-└── util_functions.py
+dataset
+  ├── convert_image_to_spike_array.py
+  ├── create_dataset.py
+  └── dataset_vizualization.ipynb
+  ├── draw_image.py
+  ├── filtered_images
+  ├── images
+  │   ├── cross.png
+  │   ├── horizontal_line_.png
+  │   ├── vertical_lines.png
+  │   └── image_45.png
+  │   └── image_135.png
+  ├── poisson_tools.py
+  └── util_functions.py
 
 
 ```
