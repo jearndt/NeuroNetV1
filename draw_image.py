@@ -35,7 +35,7 @@ def draw_line_with_angle(width, height, angle, line_length, thickness=5, img=Non
 def apply_gaussian_filter(img, kernel_size=(9, 9), sigma=5):
     return cv2.GaussianBlur(img, kernel_size, sigma)
 
-def create_dataset(output_dir, filtered_dir, width=256, height=256, line_length=100, thickness=5, positions=4, variations=50):
+def create_dataset(output_dir, filtered_dir, width=256, height=256, line_length=100, thickness=17, positions=4, variations=50):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
