@@ -1,4 +1,6 @@
-# Convert Images to Poissonian Spikes
+# Dataset Creation
+
+## Convert Images to Poissonian Spikes
 
 Convert your image data to a Poisson spike source to be able to use with Spiking Neural Networks.
 ## Technique
@@ -33,6 +35,13 @@ Poisson Spike Train Generation
   <br> on_duration = 10000 (ms)
   <br> off_duration = 5000 (ms)
 </i>
+
+
+# Model Implementation 
+
+# Results Analysis 
+
+# Running the code 
 
 ## Requirements
 * matplotlib (3.0.3)
