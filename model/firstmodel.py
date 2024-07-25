@@ -15,7 +15,7 @@ random.seed(123)
 #%%
 class spike_trains_history():
     """Class to store history of spike_trains of a layer in the SCNN"""
-    def _init_(self, r_pre = [], r_post = [], layer = None):
+    def __init__(self, r_pre = [], r_post = [], layer = None):
         self.r_pre = r_pre
         self.r_post = r_post
         self.layer = layer
@@ -97,8 +97,8 @@ def bcm_rule(r_pre, r_post, tau):
     return w_t
 
 class SCNN(torch.nn.Module):
-    def _init_(self):
-        super(SCNN, self)._init_()
+    def __init__(self):
+        super(SCNN, self).__init__()
         threshold = 1
         self.conv1 = torch.nn.Conv2d(1, 1, kernel_size=3, stride=1, padding=1)
         self.lif1 = snn.Leaky(beta=0.8, threshold=threshold)
