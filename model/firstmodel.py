@@ -7,6 +7,8 @@ import snntorch as snn
 from snntorch import surrogate
 from snntorch import utils
 import random
+import torch.nn.functional as F
+
 
 torch.manual_seed(42)
 np.random.seed(123)
@@ -114,30 +116,18 @@ class SCNN(torch.nn.Module):
         self.ind = 1
     
     # the forward function is called each time we call Leaky
+
     def forward(self, x):
-        global layer3
-        # if self.ind:
-
-        #     print("enter!!!")
-        #     # Initialize hidden states and outputs at t=0
-        #     self.mem1 = self.lif1.init_leaky()
-        #     self.mem2 = self.lif2.init_leaky()
-        #     self.mem3 = self.lif3.init_leaky()
-        #     self.ind = 0
+        spk1 = self.conv1(x)
+        spk1 = F.relu(spk1)  # Use out-of-place ReLU
         
-        cur1 = self.conv1(x)
-        spk1, self.mem1 = self.lif1(cur1,self.mem1)
-        #print(f"mem1: {self.mem1} \n")
-
         cur2 = self.conv2(spk1)
-        spk2, self.mem2 = self.lif2(cur2,self.mem2)
+        spk2 = F.relu(cur2)  # Use out-of-place ReLU
 
         cur3 = self.conv3(spk2)
-        spk3, self.mem3 = self.lif3(cur3,self.mem3)
-        print(f"mem3 : {self.mem3}")
-        layer3.r_pre = layer3.r_pre + [[spk2]]
-        layer3.r_post = layer3.r_post + [[spk3]]
-        return spk3, self.mem3
+        spk3 = F.relu(cur3)  # Use out-of-place ReLU
+
+        return spk3, cur3
 # iterate
 def forward_pass(net, num_steps):
   mem_rec = []
