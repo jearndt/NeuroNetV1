@@ -169,7 +169,7 @@ for epoch in range(epochs):
             # print(f'Epoch [{epoch+1}/{epochs}], Time point:[{time_point+1}/{200}] Step [{i+1}/{len(input_tensors)}], Output: [{output}], mem_potential: [{mem}]')
             df.loc[len(df)] = [name_df, epoch+1, i, input_tensor, metadata[i], time_point+1, model.conv2.weight.data, output]
         complex_cell_kernel = bcm_weight_updated(gamma=1, kernel_size=25, initializer=0)
-        model.conv3.weight.data = complex_cell_kernel #TODO: change self to net
+        model.conv3.weight.data = complex_cell_kernel
         
         # after first image is processed reset membrane potential to end up with comparable spike rates
         model.mem1 = helper_1
