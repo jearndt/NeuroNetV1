@@ -1,2 +1,0 @@
-Data available here: https://myshare.uni-osnabrueck.de/d/6eae4666b9cf4b1c81b9/
-Passwort: surname of lectures concatenated in order of StudIP description
