@@ -41,7 +41,7 @@ Poisson Spike Train Generation
 The SCNN model has an input layer realizing the contrast cell response. The two hidden layers realize the simple cell response and the complex cell response. The output layer consists of a single ouput neuron. 
 
 # Results Analysis 
-Conducting a Two-Way ANOVA (type III) per simple cell kernel on the two factors "orientation" (levels: 0,45,90,135) and "position" (levels: 0,1,2,3). Vizualising the boxplots accordingly. Second viszalisation is expands the boxplot by information about the evolution of the ouput during training. Make sure you downloaded the file `ouput_data` first. To access the obtained plots see `NeuroNetV1/output_data
+Conducting a Two-Way ANOVA (type III) per simple cell kernel on the two factors "orientation" (levels: 0,45,90,135) and "position" (levels: 0,1,2,3). Vizualising the boxplots accordingly. Second visualization is expands the boxplot by information about the evolution of the ouput during training. Make sure you downloaded the file `ouput_data` first. To access the obtained plots see `NeuroNetV1/output_data
 /output_data.txt`.
 
 # Running the code 
