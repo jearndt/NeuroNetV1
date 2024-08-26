@@ -50,7 +50,7 @@ Conducting a Two-Way ANOVA (type III) per simple cell kernel on the two factors 
 
 ## Running the code 
 To specify the model architecture update `model.py`. This is necessary when specifying the simple cell kernel in the function `simple_cell_kernel(gamma = 1)`.
-To make sure each of the four model architectures make use of the same generated data that is used for multiple iterations of your network model run `generate_data()` in `train_model.py`.
+To make sure each of the four model architectures make use of the same generated data that is used for multiple iterations of your network model run `generate_data()` in `train_model.py` only once after four epochs.
 
 
 ## Requirements
