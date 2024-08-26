@@ -1,5 +1,4 @@
 # SCRIPT for defining the model architecture
-#%%
 import cv2
 import numpy as np
 import torch
@@ -13,7 +12,6 @@ torch.manual_seed(42)
 np.random.seed(123)
 random.seed(123)
 
-#%%
 class spike_trains_history():
     """Class to store history of spike_trains of a layer in the SCNN"""
     def __init__(self, r_pre = [], r_post = [], layer = None):
@@ -135,5 +133,3 @@ class SCNN(torch.nn.Module):
         layer3.r_post = layer3.r_post + [[spk3]] # keeping track of the postynaptic firing rate to apply BCM learning rule
 
         return spk3, self.mem3
-
-# %%
