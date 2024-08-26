@@ -41,7 +41,7 @@ Poisson Spike Train Generation
 
 
 ## Model Implementation 
-The feedforward multilayer spiking convolutional neural network (SCNN) model has an input layer realizing the contrast cell response. The two hidden layers realize the simple cell response and the complex cell response. The output layer consists of a single ouput neuron. The complex cell response is subject to the Bienenstock-Cooper-Munro (BCM) learning rule. The Leaky Integrate-and-Fire (LIF) Neurons are part of all layers.
+The feedforward multilayer spiking convolutional neural network (SCNN) model has an input layer realizing the contrast cell response. The two hidden layers realize the simple cell response and the complex cell response. The output layer consists of a single output neuron. The complex cell response is subject to the Bienenstock-Cooper-Munro (BCM) learning rule. The Leaky Integrate-and-Fire (LIF) Neurons are part of all layers.
 The machine learning algorithm is unsupervised.
 
 ## Results & Analysis 
