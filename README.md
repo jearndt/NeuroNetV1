@@ -1,4 +1,5 @@
 # SCNN model mimicking orientation selective cells V1
+With this project we aim to contribute to the understanding of the neurocomputational basis of orientation selective cells in the primary visual cortex (V1).
 
 ## Dataset Creation
 
