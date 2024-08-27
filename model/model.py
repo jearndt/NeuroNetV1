@@ -92,7 +92,6 @@ def bcm_rule(r_pre, r_post, tau):
     """
     global initializer
     theta = r_post**2 
-    # TODO: is it always zero?? - 
     if initializer and r_post:
         theta = 0 # avoid that the first update is zero
     elif initializer:
