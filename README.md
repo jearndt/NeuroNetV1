@@ -79,6 +79,12 @@ output_data/
 
 **[draw_image.py](draw_image.py)** enables you to draw your own images by adding simple shapes into it via _OpenCV_. For more information please see the file.
 
+**[model.py](model.py)** specifies the model architecture
+
+**[train_model.py](train_model.py)** allows you to train the model and initialize the weights
+
+**[analysis.py](analysis.py)** After runing the model (or downloading `ouput_data`) the script provides the analysis and respective visualizations
+
 
 ## References and Citation
 I only used the Poissonian spikes approach to obtain spike arrays from images in this project. The original project also contains _Focal Rank Code Order_ approach in this sense.
