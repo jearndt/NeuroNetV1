@@ -99,7 +99,7 @@ inter_data[['orientation', 'position', 'sample']] = pd.DataFrame(inter_data['met
 inter_data = inter_data.drop(columns=['metadata'])
 df = inter_data
 
-# vizialize the data per data loaded (that is per kernel)
+# visualize the data per data loaded (that is per kernel)
 g = sns.FacetGrid(df, row='orientation', hue='time_point', palette='viridis', height=5, aspect=2)
 g.map(sns.stripplot, 'position', 'cumulative_rates', dodge=True, alpha=0.6, size=4, marker='o')
 g.set_axis_labels('Position', 'Cumulative Rates')
