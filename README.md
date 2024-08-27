@@ -1,9 +1,12 @@
-# Dataset Creation
+# SCNN model mimicking orientation-selective cells V1
+With this project we aim to contribute to the understanding of the neurocomputational basis of orientation-selective cells in the primary visual cortex (V1).
 
-## Convert Images to Poissonian Spikes
+## Dataset Creation
+
+### Convert Images to Poissonian Spikes
 
 Convert your image data to a Poisson spike source to be able to use with Spiking Neural Networks.
-## Technique
+### Technique
 
 
 Poisson Spike Train Generation
@@ -37,18 +40,21 @@ Poisson Spike Train Generation
 </i>
 
 
-# Model Implementation 
+## Model Implementation 
+The feedforward multilayer spiking convolutional neural network (SCNN) model has an input layer realizing the contrast cell response. The two hidden layers realize the simple cell response and the complex cell response. The output layer consists of a single output neuron. The complex cell response is subject to the Bienenstock-Cooper-Munro (BCM) learning rule. The Leaky Integrate-and-Fire (LIF) Neurons are part of all layers.
+The machine learning algorithm is unsupervised.
 
-# Results Analysis 
+## Results & Analysis 
+Conducting a Two-Way ANOVA (type III) per simple cell kernel on the two factors "orientation" (levels: 0,45,90,135) and "position" (levels: 0,1,2,3). Vizualising the boxplots accordingly. Second visualization expands the boxplot by information about the evolution of the ouput during training. Make sure you downloaded the file `ouput_data` first. To access the obtained plots see `NeuroNetV1/output_data
+/output_data.txt`.
 
-# Running the code 
+## Running the code 
+To specify the model architecture update `model.py`. This is necessary when specifying the simple cell kernel in the function `simple_cell_kernel(gamma = 1)`.
+To make sure each of the four model architectures make use of the same generated data that is used for multiple iterations of your network model run `generate_data()` in `train_model.py` only once after four epochs.
+
 
 ## Requirements
-* matplotlib (3.0.3)
-* numpy (1.17.3)
-* opencv-python (4.1.1.26)
-
-Run `pip install -r requirements.txt` to install them all.
+Run `pip install -r requirements.txt` to install.
 
 ## Project Files and Their Usage
 ```

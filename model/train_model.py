@@ -1,11 +1,17 @@
+# SCRIPT for training the model
 import os
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from firstmodel import SCNN  # Replace with the actual model import
+from model import SCNN, contrast_cell_kernel, simple_cell_kernel, bcm_weight_updated  # Replace with the actual model import
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from snntorch import utils
+import pandas as pd
+
+# TODO: specify your path
+os.chdir('#yourpath\\NeuroNetV1-main')
 
 # Enable anomaly detection
 torch.autograd.set_detect_anomaly(True)
@@ -30,14 +36,14 @@ def load_spike_data(file_path):
 
 def preprocess_spike_data(data_dir):
     input_tensors = []
-    target_tensors = []
     metadata = []  # To store metadata about the input images
 
     for orientation in orientations:
         for position in positions:
             for var in range(20):
                 file_name = f'spike_data_angle_{orientation}_position_{position}_var_{var}.txt'
-                file_path = os.path.join(data_dir, file_name)
+                # print(f"data_dir: {data_dir} \n")
+                file_path = os.path.join(data_dir, file_name).replace("\\","/")
                 spike_trains = load_spike_data(file_path)
                 
                 # Convert spike trains to a tensor
@@ -45,40 +51,13 @@ def preprocess_spike_data(data_dir):
                 for i, spikes in enumerate(spike_trains):
                     for spike_time in spikes:
                         spike_tensor[i, int(spike_time)] = 1.0
-                
+                print(f"spike_tensor.shape: {spike_tensor.shape} \n")
                 input_tensors.append(spike_tensor)
-
-                # Create a target tensor with the same size as the output tensor
-                target_tensor = torch.ones_like(spike_tensor)  # Adjust based on your specific task
-                target_tensors.append(target_tensor)
 
                 # Store the metadata
                 metadata.append((orientation, position, var))
 
-    return torch.stack(input_tensors), torch.stack(target_tensors), metadata
-
-def match_tensor_size(output_tensor, target_tensor):
-    """
-    Match the size of target_tensor to the size of output_tensor by cropping or padding.
-    """
-    output_size = output_tensor.size()
-    target_size = target_tensor.size()
-
-    # Adjust the neuron dimension (dim 1)
-    if target_size[1] > output_size[1]:
-        target_tensor = target_tensor[:, :output_size[1], :]
-    elif target_size[1] < output_size[1]:
-        padding = output_size[1] - target_size[1]
-        target_tensor = nn.functional.pad(target_tensor, (0, 0, 0, padding))
-
-    # Adjust the time dimension (dim 2)
-    if target_size[2] > output_size[2]:
-        target_tensor = target_tensor[:, :, :output_size[2]]
-    elif target_size[2] < output_size[2]:
-        padding = output_size[2] - target_size[2]
-        target_tensor = nn.functional.pad(target_tensor, (0, padding))
-
-    return target_tensor
+    return torch.stack(input_tensors), metadata
 
 def visualize_activations(output_tensor, image_index, orientation, position):
     """
@@ -99,44 +78,108 @@ def visualize_activations(output_tensor, image_index, orientation, position):
     plt.savefig(file_path)
     plt.close()
 
-# Load and preprocess data
-input_tensors, target_tensors, metadata = preprocess_spike_data(data_dir)
+def initialize_network():
+    """
+    initialize SCNN model
+    """
+    global model
+    global complex_cell_kernel
+    # Initialize model, loss function, and optimizer
+    model = SCNN()  # Replace with your model class if different
+    # Create a custom kernel: Contrast Cell kernel
+    custom_kernel = contrast_cell_kernel(gamma=1)
+    model.conv1.weight.data = custom_kernel
+    # Create a custom kernel: Simple Cell kernel
+    custom_kernel = simple_cell_kernel(gamma=1)
+    model.conv2.weight.data = custom_kernel
+    # Initialize weights according to BCM-rule
+    complex_cell_kernel = bcm_weight_updated(gamma=1, kernel_size=25, initializer=1)
+    model.conv3.weight.data = complex_cell_kernel
 
-# Initialize model, loss function, and optimizer
-model = SCNN()  # Replace with your model class if different
-loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-# Training loop
-epochs = 10
+    print("Custom weight matrix (kernel) for convolutional layer in snnTorch:")
+    print(model.conv1.weight)
+    print(model.conv2.weight)
+    print(model.conv3.weight)
+
+def generate_data():
+    """ 
+    generate input data
+    """
+    global input_tensors_data
+    global metadata_data
+    input_tensors_data, metadata_data = preprocess_spike_data(data_dir)
+
+
+# generate dataset for multiple iterations of the network
+generate_data()
+
+##########################################################################################
+#                                       START: 
+# Run this cell to obtain different model ouputs per kernel 
+# after you specified the simple cell kernel in firstmodel.py
+##########################################################################################
+
+# specify data and name of dataframe to save
+name_df = "run_23082024_orientation0_no1_kernel4"
+input_tensors = input_tensors_data[:80]
+# input_tensors = input_tensors_data[80:160] # orientation45
+# input_tensors = input_tensors_data[160:240] # orientation90
+# input_tensors = input_tensors_data[240:] # orientation135
+metadata = metadata_data[:80]
+# metadata = metadata_data[80:160] # orientation45
+# metadata = metadata_data[160:240] # orientation45
+# metadata = metadata_data[240:] # orientation135
+
+
+# Reset all the model parameters
+utils.reset(model) 
+helper_1 = model.lif1.init_leaky()
+model.mem1 = helper_1
+helper_2 = model.lif2.init_leaky()
+model.mem2 = helper_2
+helper_3 = model.lif3.init_leaky()
+model.mem3 = helper_3
+model.conv3.weight.data = complex_cell_kernel
+
+# store data in dataframe
+df = pd.DataFrame({
+    'run' : [name_df],
+    'epoch': [-1],
+    'index_of_input_tensor': [None],
+    'input_tensor' : [None],
+    'metadata' : [None],
+    'time_point': [None],
+    'simple_cell_kernel' : [model.conv2.weight.data],
+    'output': None
+})
+
+# training
+epochs = 1
 for epoch in range(epochs):
     for i in range(len(input_tensors)):
-        input_tensor = input_tensors[i].unsqueeze(0)  # Add batch dimension
-        target_tensor = target_tensors[i].unsqueeze(0)  # Add batch dimension
+        for time_point in range(200): 
+            input_tensor = input_tensors[i].unsqueeze(0).reshape(1,25,25,200).T[time_point].T  # Add batch dimension
+            # Forward pass
+            output, mem = model(input_tensor)  
 
-        # Forward pass
-        outputs, _ = model(input_tensor)  # Assuming the model returns a tuple, we take the first element
+            # Detach outputs to avoid retaining the graph
+            output = output.detach()
+
+            # print(f'Epoch [{epoch+1}/{epochs}], Time point:[{time_point+1}/{200}] Step [{i+1}/{len(input_tensors)}], Output: [{output}], mem_potential: [{mem}]')
+            df.loc[len(df)] = [name_df, epoch+1, i, input_tensor, metadata[i], time_point+1, model.conv2.weight.data, output]
+        complex_cell_kernel = bcm_weight_updated(gamma=1, kernel_size=25, initializer=0)
+        model.conv3.weight.data = complex_cell_kernel
         
-        # Match target tensor size to output tensor size
-        target_tensor = match_tensor_size(outputs, target_tensor)
-        
-        # Calculate loss
-        loss = loss_fn(outputs, target_tensor)
-        
-        # Backward pass and optimization
-        optimizer.zero_grad()
-        loss.backward(retain_graph=True)  # Retain graph if necessary for your model
-        optimizer.step()
-
-        # Detach outputs to avoid retaining the graph
-        outputs = outputs.detach()
-        target_tensor = target_tensor.detach()
-
-        print(f'Epoch [{epoch+1}/{epochs}], Step [{i+1}/{len(input_tensors)}], Loss: {loss.item():.4f}')
-
-        # Save visualizations for some examples
-        if i % 64 == 0:  # Save visualization for every 64th image
-            orientation, position, _ = metadata[i]
-            visualize_activations(outputs, i, orientation, position)
-
+        # after first image is processed reset membrane potential to end up with comparable spike rates
+        model.mem1 = helper_1
+        model.mem2 = helper_2
+        model.mem3 = helper_3
 print('Training complete.')
+
+# save data file as pd.DataFrame
+# df.to_csv(r'#yourpath' + name_df + ".csv", index=False)
+
+##########################################################################################
+#                                       END
+##########################################################################################
