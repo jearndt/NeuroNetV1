@@ -85,8 +85,3 @@ output_data/
 
 **[analysis.py](analysis.py)** After runing the model (or downloading `ouput_data`) the script provides the analysis and respective visualizations
 
-
-## References and Citation
-I only used the Poissonian spikes approach to obtain spike arrays from images in this project. The original project also contains _Focal Rank Code Order_ approach in this sense.
-
-Please refer to the original project's [Wiki page](https://github.com/NEvision/NE15/wiki) for further information.
