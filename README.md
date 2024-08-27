@@ -17,14 +17,14 @@ Poisson Spike Train Generation
 <div align="center">
   <table>
     <tr>
-      <td> <img src="dataset\images\angle_0_pos_0_var_0.png" alt="Vertical Line" height="120"> </td>
+      <td> <img src="dataset_generation\data_images_new\angle_0_position_0_var_0.png" alt="Vertical Line" height="120"> </td>
       <td> &rarr; </td>
-      <td> <img src="dataset\images\angle_45_corner_1_var_28.png" alt= "45 degrees Line"  height="120"> </td>
-      <td> <img src="dataset\images\angle_90_pos_1_var_40.png" alt= "Horizontal Line"  height="120"> </td>
+      <td> <img src="dataset_generation\data_images_new\angle_45_position_1_var_0.png" alt= "45 degrees Line"  height="120"> </td>
+      <td> <img src="dataset_generation\data_images_new\angle_90_position_1_var_0.png" alt= "Horizontal Line"  height="120"> </td>
       <td> &rarr; </td>
-      <td> <img src="dataset\images\angle_135_corner_3_var_49.png" alt="135 degrees Line" height="120"> </td>
+      <td> <img src="dataset_generation\data_images_new\angle_135_position_3_var_0.png" alt="135 degrees Line" height="120"> </td>
       <td> &rarr; </td>
-      <td> <img src="dataset\raster_plots\raster_plot_angle_0_pos_0_var_0.png" alt="Horizontal Line-SpikesPlot" height="135"> </td> 
+      <td> <img src="dataset_generation\raster_plots_new\raster_plot_angle_0_position_0_var_0.png" alt="Horizontal Line-SpikesPlot" height="135"> </td> 
     </tr>
   </table>
 </div>  
