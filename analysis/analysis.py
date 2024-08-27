@@ -15,7 +15,6 @@ def tensor_to_int(tensor):
     return int(tensor.item())
 
 def string_to_tensor(tensor_str):
-    # Den Wert im Format "tensor([[[X]]])" extrahieren und als Tensor konvertieren
     value = ast.literal_eval(tensor_str.replace("tensor", "").strip())
     return torch.tensor(value)
 
