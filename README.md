@@ -54,11 +54,7 @@ To make sure each of the four model architectures make use of the same generated
 
 
 ## Requirements
-* matplotlib (3.0.3)
-* numpy (1.17.3)
-* opencv-python (4.1.1.26)
-
-Run `pip install -r requirements.txt` to install them all.
+Run `pip install -r requirements.txt` to install.
 
 ## Project Files and Their Usage
 ```
